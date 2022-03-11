@@ -37,8 +37,8 @@ def update_screen(screen: pygame.Surface, matrix: Matrix, size_per_pixel: int):
     for row in range(matrix.size_y):
         for column in range(matrix.size_x):
             color = matrix.get_pixel(column, row)
-            pygame.draw.rect(screen, (color.r, color.g, color.b),
-                             pygame.Rect(column * size_per_pixel, row * size_per_pixel, size_per_pixel, size_per_pixel))
+            pygame.draw.rect(screen, color.value,
+                             (column * size_per_pixel, row * size_per_pixel, size_per_pixel, size_per_pixel))
 
     pygame.display.update()
 
