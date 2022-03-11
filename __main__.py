@@ -46,7 +46,7 @@ def update_screen(screen: pygame.Surface, matrix: Matrix, size_per_pixel: int):
 if __name__ == '__main__':
     print('Hello World!')
     matrix = initialize_matrix(30, 30)
-    size_per_pixel = 30
+    size_per_pixel = 20
     screen = initialize_pygame(matrix, size_per_pixel)
 
     # Game loop
