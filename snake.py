@@ -20,7 +20,8 @@ class SnakeDirection(enum.Enum):
 
 class Snake(Game):
     """
-    A simple Snake game implementation.
+    A simple snake game implementation.
+    Eat the food to grow and don't hit the walls or yourself.
 
     The snake is controlled by the arrow keys.
     """
@@ -45,13 +46,21 @@ class Snake(Game):
     def create_initial_snake_body(self):
         """
         Creates the initial body of the snake.
+        The initial body is 4 pixels long
         """
         self.snake_head = [self.size_x // 2, max(self.size_y // 2 - 3, 0)]
         for i in range(3):
             self.snake_body.insert(0, list(self.snake_head))
             self.update_snake_head_position()
+        self.snake_body.insert(0, list(self.snake_head))
 
     def spawn_new_food(self):
+        """
+        Spawns a new food at a random position.
+        If food is spawned on top of the snake, the food is respawned at a random position.
+
+        :return:
+        """
         while not self.food_spawn:
             self.food_pos = [random.randrange(0, self.size_x - 1), random.randrange(0, self.size_y - 1)]
             print('Try food spawn at: ', self.food_pos)
@@ -61,6 +70,7 @@ class Snake(Game):
     def update_snake_direction(self):
         """
         Updates the direction of the snake if possible.
+        Prevents the snake from turning 180 degrees.
         """
         if self.change_to == SnakeDirection.UP and self.direction != SnakeDirection.DOWN:
             self.direction = SnakeDirection.UP
@@ -72,6 +82,9 @@ class Snake(Game):
             self.direction = SnakeDirection.RIGHT
 
     def update_snake_head_position(self):
+        """
+        Updates the position of the snake head according to the current direction.
+        """
         if self.direction == SnakeDirection.UP:
             self.snake_head[1] -= 1
         elif self.direction == SnakeDirection.DOWN:
@@ -82,6 +95,11 @@ class Snake(Game):
             self.snake_head[0] += 1
 
     def update_snake_body(self) -> Optional[List[int]]:
+        """
+        Updates the snake body.
+
+        :return: The tail pixel that is removed from the snake body.
+        """
         self.snake_body.insert(0, list(self.snake_head))
         if self.snake_head[0] == self.food_pos[0] and self.snake_head[1] == self.food_pos[1]:
             self.food_spawn = False
@@ -90,6 +108,12 @@ class Snake(Game):
         return self.snake_body.pop()
 
     def check_game_over(self) -> bool:
+        """
+        Checks if the game is over.
+        The game is over if the snake hits the wall or itself.
+
+        :return:
+        """
         if self.snake_head[0] < 0 or self.snake_head[0] >= self.size_x \
                 or self.snake_head[1] < 0 or self.snake_head[1] >= self.size_y:
             return True
@@ -122,11 +146,17 @@ class Snake(Game):
             matrix.set_pixel(old_tail[0], old_tail[1], BACKGROUND_COLOR)
 
     def on_key_press(self, key: Key):
-        if key == Key.ARROW_UP:
+        """
+        Updates the next direction of the snake if the key press is valid.
+        Prevents the snake from reversing direction.
+
+        :param key: Key that was pressed.
+        """
+        if key == Key.ARROW_UP and self.direction != SnakeDirection.DOWN:
             self.change_to = SnakeDirection.UP
-        elif key == Key.ARROW_DOWN:
+        elif key == Key.ARROW_DOWN and self.direction != SnakeDirection.UP:
             self.change_to = SnakeDirection.DOWN
-        elif key == Key.ARROW_LEFT:
+        elif key == Key.ARROW_LEFT and self.direction != SnakeDirection.RIGHT:
             self.change_to = SnakeDirection.LEFT
-        elif key == Key.ARROW_RIGHT:
+        elif key == Key.ARROW_RIGHT and self.direction != SnakeDirection.LEFT:
             self.change_to = SnakeDirection.RIGHT
