@@ -4,6 +4,7 @@ import pygame
 
 # Window size
 from key import Key
+# from led_matrix_write import update_led_matrix
 from matrix import Matrix
 from snake import Snake
 
@@ -69,6 +70,7 @@ def main():
         if not game.game_over:
             game.update_matrix(matrix)
         update_screen(screen, matrix, size_per_pixel)
+        # update_led_matrix(matrix)
         # Delay game loop
         wait = pygame.time.wait(80)
 
