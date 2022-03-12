@@ -10,11 +10,13 @@ class Game:
     """
     name: str = 'Unnamed Game'
     description: str = 'No description'
-    matrix: Matrix = None
+    game_over = False
+    size_x: int
+    size_y: int
 
-    def __init__(self, matrix: Matrix, **data: Any):
-        super().__init__(**data)
-        self.matrix = matrix
+    def __init__(self, matrix: Matrix):
+        self.size_x = matrix.size_x
+        self.size_y = matrix.size_y
 
     def on_key_press(self, key: Key):
         """
@@ -22,8 +24,8 @@ class Game:
         """
         pass
 
-    def on_tick(self):
+    def update_matrix(self, matrix: Matrix):
         """
-        Method to handle ticks.
+        Method to update the matrix every tick.
         """
         pass
