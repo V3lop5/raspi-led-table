@@ -49,6 +49,10 @@ def main():
     size_per_pixel = 20
     screen = initialize_pygame(matrix, size_per_pixel)
 
+    pygame.joystick.init()
+    if pygame.joystick.get_count() > 0:
+        joystick = pygame.joystick.Joystick(0)
+        joystick.init()
     # Game loop
     game = Snake(matrix)
     while True:
@@ -56,6 +60,23 @@ def main():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            elif event.type == pygame.JOYBUTTONDOWN:
+                # Joystick button
+                print('Joystick button pressed ' + str(event.button))
+                if event.button == 4:
+                    game.on_key_press(Key.BACK_LEFT)
+                elif event.button == 5:
+                    game.on_key_press(Key.BACK_RIGHT)
+            elif event.type == pygame.JOYAXISMOTION:
+                if abs(event.value) > 0.5:
+                    if event.axis == 0 and event.value > 0:
+                        game.on_key_press(Key.ARROW_RIGHT)
+                    elif event.axis == 0 and event.value < 0:
+                        game.on_key_press(Key.ARROW_LEFT)
+                    elif event.axis == 1 and event.value > 0:
+                        game.on_key_press(Key.ARROW_DOWN)
+                    elif event.axis == 1 and event.value < 0:
+                        game.on_key_press(Key.ARROW_UP)
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
                     game.on_key_press(Key.ARROW_UP)
@@ -70,7 +91,7 @@ def main():
             game.update_matrix(matrix)
         update_screen(screen, matrix, size_per_pixel)
         # Delay game loop
-        wait = pygame.time.wait(80)
+        wait = pygame.time.wait(95)
 
 
 if __name__ == '__main__':

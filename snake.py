@@ -12,10 +12,16 @@ SNAKE_COLOR = PixelColor.RED
 
 
 class SnakeDirection(enum.Enum):
-    UP = 1
+    UP = 0
+    RIGHT = 1
     DOWN = 2
     LEFT = 3
-    RIGHT = 4
+
+    def rotate_left(self):
+        return SnakeDirection((self.value + 3) % 4)
+
+    def rotate_right(self):
+        return SnakeDirection((self.value + 1) % 4)
 
 
 class Snake(Game):
@@ -160,3 +166,9 @@ class Snake(Game):
             self.change_to = SnakeDirection.LEFT
         elif key == Key.ARROW_RIGHT and self.direction != SnakeDirection.LEFT:
             self.change_to = SnakeDirection.RIGHT
+        elif key == Key.BACK_LEFT:
+            self.change_to = self.change_to.rotate_left()
+        elif key == Key.BACK_RIGHT:
+            self.change_to = self.change_to.rotate_right()
+            print(self.change_to)
+
