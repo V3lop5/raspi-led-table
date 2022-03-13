@@ -1,2 +1,4 @@
 pygame
 pydantic
+adafruit-blinka
+adafruit-circuitpython-neopixel
